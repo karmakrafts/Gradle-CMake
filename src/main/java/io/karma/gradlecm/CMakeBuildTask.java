@@ -1,4 +1,4 @@
-package net.freudasoft;
+package io.karma.gradlecm;
 
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
@@ -69,12 +69,12 @@ public class CMakeBuildTask extends AbstractCMakeTask {
     protected void gatherBuildParameters(ArrayList<String> params) {
         final String gen = generator.getOrNull();
 
-        if(gen != null) {
-            if(gen.equals("Unix Makefiles") || gen.equals("MinGW Makefiles")) {
+        if (gen != null) {
+            if (gen.equals("Unix Makefiles") || gen.equals("MinGW Makefiles")) {
                 params.add("-j");
                 params.add(Integer.toString(numUsableThreads));
             }
-            else if(gen.contains("Visual Studio")) {
+            else if (gen.contains("Visual Studio")) {
                 params.add("/MP"); // Automatically grabs the right # of threads :)
             }
         }

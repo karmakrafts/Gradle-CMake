@@ -1,4 +1,4 @@
-package net.freudasoft;
+package io.karma.gradlecm;
 
 import org.gradle.api.GradleException;
 import org.gradle.api.GradleScriptException;
@@ -27,8 +27,7 @@ public class CMakeExecutor {
         // log command line parameters
         StringBuilder sb = new StringBuilder("  CMakePlugin.task " + taskName + " - exec: ");
         for (String s : cmdLine) {
-            sb.append(s)
-                    .append(" ");
+            sb.append(s).append(" ");
         }
         logger.info(sb.toString());
 
@@ -40,7 +39,6 @@ public class CMakeExecutor {
         try {
             // make sure working folder exists
             workingFolder.mkdirs();
-
             // start
             Process process = pb.start();
 
@@ -52,8 +50,8 @@ public class CMakeExecutor {
             }
             if (null != (line = errorReader.readLine())) {
                 logger.error("  CMakePlugin.cmakeConfigure - ERRORS: ");
-                do
-                {
+
+                do {
                     logger.error(line);
                 }
                 while ((line = errorReader.readLine()) != null);
@@ -65,14 +63,9 @@ public class CMakeExecutor {
                 throw new GradleException("[" + taskName + "]Error: CMAKE returned " + retCode);
             }
         }
-        catch (IOException e) {
-            throw new GradleScriptException("CMakeExecutor[" + taskName + "].", e);
-        }
-        catch (InterruptedException e) {
+        catch (IOException | InterruptedException e) {
             throw new GradleScriptException("CMakeExecutor[" + taskName + "].", e);
         }
     }
-
-
 }
 

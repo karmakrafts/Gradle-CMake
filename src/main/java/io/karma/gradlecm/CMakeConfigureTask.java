@@ -1,4 +1,4 @@
-package net.freudasoft;
+package io.karma.gradlecm;
 
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
@@ -52,18 +52,22 @@ public class CMakeConfigureTask extends AbstractCMakeTask {
             params.add(toolset.get());
         }
 
-        if (configurationTypes.isPresent() && !configurationTypes.get().isEmpty())
+        if (configurationTypes.isPresent() && !configurationTypes.get().isEmpty()) {
             params.add("-DCMAKE_CONFIGURATION_TYPES=" + configurationTypes.get());
+        }
 
-        if (installPrefix.isPresent() && !installPrefix.get().isEmpty())
+        if (installPrefix.isPresent() && !installPrefix.get().isEmpty()) {
             params.add("-DCMAKE_INSTALL_PREFIX=" + installPrefix.get());
+        }
 
 
-        if (buildSharedLibs.isPresent())
+        if (buildSharedLibs.isPresent()) {
             params.add("-DBUILD_SHARED_LIBS=" + (buildSharedLibs.get() ? "ON" : "OFF"));
+        }
 
-        if (buildStaticLibs.isPresent())
+        if (buildStaticLibs.isPresent()) {
             params.add("-DBUILD_STATIC_LIBS=" + (buildStaticLibs.get() ? "ON" : "OFF"));
+        }
 
 
         if (def.isPresent()) {

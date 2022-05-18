@@ -1,4 +1,4 @@
-package net.freudasoft;
+package io.karma.gradlecm;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
@@ -36,7 +36,9 @@ public abstract class AbstractCMakeTask extends DefaultTask {
     }
 
     protected abstract void gatherParameters(ArrayList<String> params);
+
     protected abstract void gatherBuildParameters(ArrayList<String> params);
+
     protected abstract void copyConfiguration(CMakePluginExtension ext);
 
     public void configureFromProject() {
@@ -57,7 +59,7 @@ public abstract class AbstractCMakeTask extends DefaultTask {
         final ArrayList<String> buildParams = new ArrayList<>();
         gatherBuildParameters(buildParams);
 
-        if(!buildParams.isEmpty()) {
+        if (!buildParams.isEmpty()) {
             params.add("--");
             params.addAll(buildParams);
         }

@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-package net.freudasoft;
+package io.karma.gradlecm;
 
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
