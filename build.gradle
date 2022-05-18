@@ -58,47 +58,4 @@ publishing {
             }
         }
     }
-    publications {
-        gradlecm(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            artifact jar
-
-            pom {
-                name = project.archivesBaseName
-                description = project.archivesBaseName
-                //The publish plugin doesnt like GString's here apparently..
-                url = "https://git.karmakrafts.dev/kk/gradle-cmake".toString()
-
-                scm {
-                    url = "https://git.karmakrafts.dev/kk/gradle-cmake".toString()
-                }
-
-                issueManagement {
-                    system = 'gitlab'
-                    url = "https://git.karmakrafts.dev/kk/gradle-cmake/issues".toString()
-                }
-
-                licenses {
-                    license {
-                        name = "The MIT License"
-                        url = "https://git.karmakrafts.dev/kk/gradle-cmake/-/blob/master/LICENSE"
-                        distribution = 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'kitsunealex'
-                        name = 'KitsuneAlex'
-                    }
-                    developer {
-                        id = 'freudi74'
-                        name = 'Marco Freudenberger'
-                    }
-                }
-            }
-        }
-    }
 }
