@@ -63,13 +63,11 @@ publishing {
             groupId project.group
             artifactId project.archivesBaseName
             version project.version
-            //artifact jar
-            //artifact shadowJar
-            //artifact sourcesJar
+            artifact jar
 
             pom {
-                name = archivesBaseName
-                description = archivesBaseName
+                name = project.archivesBaseName
+                description = project.archivesBaseName
                 //The publish plugin doesnt like GString's here apparently..
                 url = "https://git.karmakrafts.dev/kk/gradle-cmake".toString()
 
