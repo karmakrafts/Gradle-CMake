@@ -74,9 +74,6 @@ public class CMakeBuildTask extends AbstractCMakeTask {
                 params.add("-j");
                 params.add(Integer.toString(numUsableThreads));
             }
-            else if (gen.contains("Visual Studio")) {
-                params.add("/MP"); // Automatically grabs the right # of threads :)
-            }
         }
     }
 
