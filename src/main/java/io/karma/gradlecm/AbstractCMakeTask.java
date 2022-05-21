@@ -21,10 +21,10 @@ import java.util.ArrayList;
  * @since 17/05/2022
  */
 public abstract class AbstractCMakeTask extends DefaultTask {
-    protected final Property<String> executable;
-    protected final DirectoryProperty sourceFolder;
-    protected final Property<String> generator; // for example: "Visual Studio 16 2019"
-    protected final DirectoryProperty workingFolder;
+    public final Property<String> executable;
+    public final DirectoryProperty sourceFolder;
+    public final Property<String> generator; // for example: "Visual Studio 16 2019"
+    public final DirectoryProperty workingFolder;
 
     protected AbstractCMakeTask() {
         workingFolder = getProject().getObjects().directoryProperty();
@@ -66,7 +66,7 @@ public abstract class AbstractCMakeTask extends DefaultTask {
 
         return params;
     }
-
+    
     @Input
     @Optional
     public Property<String> getGenerator() {
