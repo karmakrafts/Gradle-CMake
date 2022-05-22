@@ -16,7 +16,7 @@ buildscript {
         maven { url = 'https://maven.covers1624.net' }
     }
     dependencies {
-        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.0.0.5'
+        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.0.1.9'
     }
 }
 
@@ -36,7 +36,8 @@ cmake {
     // Optional source folder. This is where the main CMakeLists.txt file resides. Default is ./src/main/cpp
     sourceFolder = file("$projectDir/src/main/cpp")
     // Select a generator (optional, otherwise cmake's default generator is used)
-    generator = 'Visual Studio 15 2017'
+    generator = 'Visual Studio 17 2022' // For MSVC
+    // generator = 'Unix Makefiles' // For Clang/GCC on Linux to properly use multi-threading
     
     // ---------- cmakeConfigure Parameters
     
@@ -51,7 +52,9 @@ cmake {
     // Optionally set to build shared libs
     buildSharedLibs = true
     // Define arbitrary CMake parameters. The below adds -Dtest=hello to cmake command line.
-    def.test = 'hello'
+    defs.test = 'hello'
+    // Define arbitrary temporary environment variables for the build
+    env.SOME_ENV_VAR = 'TestingTesting'
     
     // ---------- cmakeBuild Parameters
     
