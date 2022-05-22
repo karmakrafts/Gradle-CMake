@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +24,12 @@ import java.util.Set;
  * @since 28/05/2019
  */
 public final class CMakeExecutor {
-    private static final String envCmd = SystemInfo.isWindows() ? "set" : "export";
+    // @formatter:off
+    private static final String[] envCmd = SystemInfo.isWindows()
+        ? new String[]{"cmd.exe", "/c", "set"}
+        : new String[]{"sh", "export"};
+    // @formatter:on
+
     private final Logger logger;
     private final String taskName;
     private final HashMap<String, String> env = new HashMap<>();
@@ -49,19 +56,16 @@ public final class CMakeExecutor {
             if (!env.isEmpty()) {
                 logger.info("Setting up shell environment variables");
 
-                final Runtime runtime = Runtime.getRuntime();
+                final ArrayList<String> auxCommands = new ArrayList<>();
                 final Set<Entry<String, String>> entries = env.entrySet();
 
                 for(final Entry<String, String> entry : entries) {
-                    final String cmd = String.format("%s %s=%s", envCmd, entry.getKey(), entry.getValue());
-                    final int exitCode = runtime.exec(cmd).waitFor();
-
-                    if(exitCode != 0) {
-                        throw new GradleException(String.format("Could not set environment variable, exit code %d", exitCode));
-                    }
-
-                    logger.info(String.format("%s..OK", cmd));
+                    auxCommands.addAll(Arrays.asList(envCmd));
+                    auxCommands.add(String.format("%s=%s", entry.getKey(), entry.getValue()));
+                    auxCommands.add("&"); // Joining commands un-conditionally works the same on all OSs, luckily
                 }
+
+                cmdLine.addAll(0, auxCommands); // Insert before the given CLI commands
             }
 
             final ProcessBuilder processBuilder = new ProcessBuilder(cmdLine);

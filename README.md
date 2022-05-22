@@ -16,7 +16,7 @@ buildscript {
         maven { url = 'https://maven.covers1624.net' }
     }
     dependencies {
-        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.0.1.12'
+        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.0.1.13'
     }
 }
 

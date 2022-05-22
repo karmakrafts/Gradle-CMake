@@ -74,18 +74,12 @@ public abstract class AbstractCMakeTask extends DefaultTask {
             final Set<Entry<String, String>> envEntries = env.get().entrySet();
 
             if (!envEntries.isEmpty()) {
-                final StringBuilder builder = new StringBuilder();
-
                 params.add(executable);
                 params.add("-E");
                 params.add("env");
 
                 for (final Entry<String, String> entry : envEntries) {
-                    builder.delete(0, builder.length());
-                    builder.append(entry.getKey());
-                    builder.append('=');
-                    builder.append(entry.getValue());
-                    params.add(builder.toString());
+                    params.add(String.format("%s=%s", entry.getKey(), entry.getValue()));
                 }
             }
         }
