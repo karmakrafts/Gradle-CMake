@@ -27,7 +27,7 @@ public final class CMakeExecutor {
     // @formatter:off
     private static final String[] envCmd = SystemInfo.isWindows()
         ? new String[]{"cmd.exe", "/c", "set"}
-        : new String[]{"sh", "export"};
+        : new String[]{"sh", "-c", "export"};
     // @formatter:on
 
     private final Logger logger;
