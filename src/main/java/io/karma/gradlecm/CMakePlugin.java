@@ -33,7 +33,7 @@ import java.io.InputStreamReader;
  */
 public class CMakePlugin implements Plugin<Project> {
     private boolean deleteDirectory(File directoryToBeDeleted) {
-        File[] allContents = directoryToBeDeleted.listFiles();
+        final File[] allContents = directoryToBeDeleted.listFiles();
         if (allContents != null) {
             for (File file : allContents) {
                 deleteDirectory(file);
@@ -62,7 +62,7 @@ public class CMakePlugin implements Plugin<Project> {
                 task.getToolset().set(extension.getToolset());
                 task.getBuildSharedLibs().set(extension.getBuildSharedLibs());
                 task.getBuildStaticLibs().set(extension.getBuildStaticLibs());
-                task.getDef().set(extension.getDef());
+                task.getDefs().set(extension.getDefs());
             }
         });
 
@@ -111,10 +111,7 @@ public class CMakePlugin implements Plugin<Project> {
                 }
                 process.waitFor();
             }
-            catch (IOException e) {
-                throw new GradleScriptException("cmake --help failed.", e);
-            }
-            catch (InterruptedException e) {
+            catch (IOException | InterruptedException e) {
                 throw new GradleScriptException("cmake --help failed.", e);
             }
         });
