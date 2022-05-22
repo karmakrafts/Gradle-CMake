@@ -4,6 +4,7 @@ import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @author Alexander 'KitsuneAlex' Hinze
  * @since 28/05/2019
  */
-public class CMakeBuildTask extends AbstractCMakeTask {
+public final class CMakeBuildTask extends AbstractCMakeTask {
     private static final int numHostThreads = Runtime.getRuntime().availableProcessors();
     /**
      * Find the optimal number of threads to use for the build;
@@ -46,7 +47,7 @@ public class CMakeBuildTask extends AbstractCMakeTask {
     }
 
     @Override
-    protected void copyConfiguration(CMakePluginExtension ext) {
+    protected void copyConfiguration(final @NotNull CMakePluginExtension ext) {
         executable.set(ext.getExecutable());
         buildConfig.set(ext.getBuildConfig());
         buildTarget.set(ext.getBuildTarget());
@@ -54,7 +55,7 @@ public class CMakeBuildTask extends AbstractCMakeTask {
     }
 
     @Override
-    protected void gatherParameters(ArrayList<String> params) {
+    protected void gatherParameters(final @NotNull ArrayList<String> params) {
         params.add("--build");
         params.add("."); // working folder will be executable working dir --- workingFolder.getAsFile().get().getAbsolutePath()
 
@@ -74,7 +75,7 @@ public class CMakeBuildTask extends AbstractCMakeTask {
     }
 
     @Override
-    protected void gatherBuildParameters(ArrayList<String> params) {
+    protected void gatherBuildParameters(final @NotNull ArrayList<String> params) {
         final String gen = generator.getOrNull();
 
         if (gen != null) {
@@ -87,25 +88,25 @@ public class CMakeBuildTask extends AbstractCMakeTask {
 
     @Input
     @Optional
-    public Property<String> getExecutable() {
+    public @NotNull Property<String> getExecutable() {
         return executable;
     }
 
     @Input
     @Optional
-    public Property<String> getBuildConfig() {
+    public @NotNull Property<String> getBuildConfig() {
         return buildConfig;
     }
 
     @Input
     @Optional
-    public Property<String> getBuildTarget() {
+    public @NotNull Property<String> getBuildTarget() {
         return buildTarget;
     }
 
     @Input
     @Optional
-    public Property<Boolean> getBuildClean() {
+    public @NotNull Property<Boolean> getBuildClean() {
         return buildClean;
     }
 }

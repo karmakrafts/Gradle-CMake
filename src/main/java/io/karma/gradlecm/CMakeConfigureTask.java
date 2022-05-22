@@ -5,17 +5,22 @@ import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Set;
 
 /**
+ * This task delegates functionality to configure the current
+ * build target before invoking the actual build.
+ * It also handles setting up the appropriate toolchain(s) automatically.
+ *
  * @author Marco 'freudi74' Freudenberger
  * @author Alexander 'KitsuneAlex' Hinze
  * @since 28/05/2019
  */
-public class CMakeConfigureTask extends AbstractCMakeTask {
+public final class CMakeConfigureTask extends AbstractCMakeTask {
     private final Property<String> configurationTypes;
     private final Property<String> installPrefix;
     private final Property<String> platform; // for example "x64" or "Win32" or "ARM" or "ARM64", supported on vs > 8.0
@@ -44,7 +49,7 @@ public class CMakeConfigureTask extends AbstractCMakeTask {
     }
 
     @Override
-    protected void gatherParameters(ArrayList<String> params) {
+    protected void gatherParameters(final @NotNull ArrayList<String> params) {
         if (this.generator.isPresent() && !this.generator.get().isEmpty()) {
             params.add("-G");
             params.add(this.generator.get());
@@ -81,7 +86,7 @@ public class CMakeConfigureTask extends AbstractCMakeTask {
             final Set<Entry<String, String>> defEntries = defs.get().entrySet();
 
             for (final Entry<String, String> entry : defEntries) {
-                params.add("-D" + entry.getKey() + "=" + entry.getValue());
+                params.add(String.format("-D%s=%s", entry.getKey(), entry.getValue()));
             }
         }
 
@@ -89,12 +94,10 @@ public class CMakeConfigureTask extends AbstractCMakeTask {
     }
 
     @Override
-    protected void gatherBuildParameters(ArrayList<String> params) {
-
-    }
+    protected void gatherBuildParameters(final @NotNull ArrayList<String> params) {}
 
     @Override
-    protected void copyConfiguration(CMakePluginExtension ext) {
+    protected void copyConfiguration(final @NotNull CMakePluginExtension ext) {
         configurationTypes.set(ext.getConfigurationTypes());
         installPrefix.set(ext.getInstallPrefix());
         platform.set(ext.getPlatform());
@@ -106,43 +109,43 @@ public class CMakeConfigureTask extends AbstractCMakeTask {
 
     @Input
     @Optional
-    public Property<String> getConfigurationTypes() {
+    public @NotNull Property<String> getConfigurationTypes() {
         return configurationTypes;
     }
 
     @Input
     @Optional
-    public Property<String> getInstallPrefix() {
+    public @NotNull Property<String> getInstallPrefix() {
         return installPrefix;
     }
 
     @Input
     @Optional
-    public Property<String> getPlatform() {
+    public @NotNull Property<String> getPlatform() {
         return platform;
     }
 
     @Input
     @Optional
-    public Property<String> getToolset() {
+    public @NotNull Property<String> getToolset() {
         return toolset;
     }
 
     @Input
     @Optional
-    public Property<Boolean> getBuildSharedLibs() {
+    public @NotNull Property<Boolean> getBuildSharedLibs() {
         return buildSharedLibs;
     }
 
     @Input
     @Optional
-    public Property<Boolean> getBuildStaticLibs() {
+    public @NotNull Property<Boolean> getBuildStaticLibs() {
         return buildStaticLibs;
     }
 
     @Input
     @Optional
-    public MapProperty<String, String> getDefs() {
+    public @NotNull MapProperty<String, String> getDefs() {
         return defs;
     }
 }

@@ -22,11 +22,13 @@ targetCompatibility = config.java_version
 repositories {
     mavenCentral()
     google()
+    maven { url = 'https://maven.covers1624.net' }
 }
 
 dependencies {
     implementation gradleApi()
     implementation group: 'org.jetbrains', name: 'annotations', version: config.annotations_version
+    implementation group: 'io.karma.kommons', name: 'kommons', version: config.kommons_version
 }
 
 gradlePlugin {

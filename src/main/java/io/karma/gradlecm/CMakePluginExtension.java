@@ -15,8 +15,10 @@ package io.karma.gradlecm;
 
 import org.gradle.api.Project;
 import org.gradle.api.file.DirectoryProperty;
+import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -25,12 +27,13 @@ import java.io.File;
  * @author Alexander 'KitsuneAlex' Hinze
  * @since 28/05/2019
  */
-public class CMakePluginExtension {
+public final class CMakePluginExtension {
     // parameters used by config and build step
     private final Property<String> executable;
     private final DirectoryProperty workingFolder;
     private final Property<String> generator; // for example: "Visual Studio 16 2019"
     private final MapProperty<String, String> env;
+    private final MapProperty<String, String> shellEnv;
 
     // parameters used by config step
     private final DirectoryProperty sourceFolder;
@@ -48,87 +51,96 @@ public class CMakePluginExtension {
     private final Property<Boolean> buildClean;
 
 
-    public CMakePluginExtension(Project project) {
-        executable = project.getObjects().property(String.class);
-        workingFolder = project.getObjects().directoryProperty();
-        generator = project.getObjects().property(String.class);
-        env = project.getObjects().mapProperty(String.class, String.class);
+    public CMakePluginExtension(final @NotNull Project project) {
+        final ObjectFactory factory = project.getObjects();
 
-        sourceFolder = project.getObjects().directoryProperty();
-        configurationTypes = project.getObjects().property(String.class);
-        installPrefix = project.getObjects().property(String.class);
-        platform = project.getObjects().property(String.class);
-        toolset = project.getObjects().property(String.class);
-        buildSharedLibs = project.getObjects().property(Boolean.class);
-        buildStaticLibs = project.getObjects().property(Boolean.class);
-        defs = project.getObjects().mapProperty(String.class, String.class);
+        // @formatter:off
+        executable          = factory.property(String.class);
+        workingFolder       = factory.directoryProperty();
+        generator           = factory.property(String.class);
+        env                 = factory.mapProperty(String.class, String.class);
+        shellEnv            = factory.mapProperty(String.class, String.class);
 
-        buildConfig = project.getObjects().property(String.class);
-        buildTarget = project.getObjects().property(String.class);
-        buildClean = project.getObjects().property(Boolean.class);
+        sourceFolder        = factory.directoryProperty();
+        configurationTypes  = factory.property(String.class);
+        installPrefix       = factory.property(String.class);
+        platform            = factory.property(String.class);
+        toolset             = factory.property(String.class);
+        buildSharedLibs     = factory.property(Boolean.class);
+        buildStaticLibs     = factory.property(Boolean.class);
+        defs                = factory.mapProperty(String.class, String.class);
+
+        buildConfig         = factory.property(String.class);
+        buildTarget         = factory.property(String.class);
+        buildClean          = factory.property(Boolean.class);
+        // @formatter:on
 
         // default values
         workingFolder.set(new File(project.getBuildDir(), "cmake"));
         sourceFolder.set(new File(project.getBuildDir(), "src" + File.separator + "main" + File.separator + "cpp"));
     }
 
-    public Property<String> getExecutable() {
+    public @NotNull Property<String> getExecutable() {
         return executable;
     }
 
-    public DirectoryProperty getWorkingFolder() {
+    public @NotNull DirectoryProperty getWorkingFolder() {
         return workingFolder;
     }
 
-    public DirectoryProperty getSourceFolder() {
+    public @NotNull DirectoryProperty getSourceFolder() {
         return sourceFolder;
     }
 
-    public Property<String> getConfigurationTypes() {
+    public @NotNull Property<String> getConfigurationTypes() {
         return configurationTypes;
     }
 
-    public Property<String> getInstallPrefix() {
+    public @NotNull Property<String> getInstallPrefix() {
         return installPrefix;
     }
 
-    public Property<String> getGenerator() {
+    public @NotNull Property<String> getGenerator() {
         return generator;
     }
 
-    public Property<String> getPlatform() {
+    public @NotNull Property<String> getPlatform() {
         return platform;
     }
 
-    public Property<String> getToolset() {
+    public @NotNull Property<String> getToolset() {
         return toolset;
     }
 
-    public Property<Boolean> getBuildSharedLibs() {
+    public @NotNull Property<Boolean> getBuildSharedLibs() {
         return buildSharedLibs;
     }
 
-    public Property<Boolean> getBuildStaticLibs() {
+    public @NotNull Property<Boolean> getBuildStaticLibs() {
         return buildStaticLibs;
     }
 
-    public MapProperty<String, String> getDefs() {
+    public @NotNull MapProperty<String, String> getDefs() {
         return defs;
     }
 
-    public Property<String> getBuildConfig() {
+    public @NotNull Property<String> getBuildConfig() {
         return buildConfig;
     }
 
-    public Property<String> getBuildTarget() {
+    public @NotNull Property<String> getBuildTarget() {
         return buildTarget;
     }
 
-    public Property<Boolean> getBuildClean() {
+    public @NotNull Property<Boolean> getBuildClean() {
         return buildClean;
     }
 
-    public MapProperty<String, String> getEnv() {
+    public @NotNull MapProperty<String, String> getEnv() {
         return env;
+    }
+
+    public @NotNull MapProperty<String, String> getShellEnv() {
+        return shellEnv;
     }
 }

@@ -10,6 +10,7 @@ import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +30,8 @@ public abstract class AbstractCMakeTask extends DefaultTask {
     public final DirectoryProperty sourceFolder;
     public final Property<String> generator; // for example: "Visual Studio 16 2019"
     public final DirectoryProperty workingFolder;
-    private final MapProperty<String, String> env;
+    public final MapProperty<String, String> env;
+    public final MapProperty<String, String> shellEnv;
 
     protected AbstractCMakeTask() {
         final ObjectFactory factory = getProject().getObjects();
@@ -40,17 +42,18 @@ public abstract class AbstractCMakeTask extends DefaultTask {
         executable      = factory.property(String.class);
         sourceFolder    = factory.directoryProperty();
         env             = factory.mapProperty(String.class, String.class);
+        shellEnv        = factory.mapProperty(String.class, String.class);
         // @formatter:on
 
         workingFolder.set(new File(getProject().getBuildDir(), "cmake"));
         sourceFolder.set(new File(getProject().getBuildDir(), "src" + File.separator + "main" + File.separator + "cpp"));
     }
 
-    protected abstract void gatherParameters(ArrayList<String> params);
+    protected abstract void gatherParameters(final @NotNull ArrayList<String> params);
 
-    protected abstract void gatherBuildParameters(ArrayList<String> params);
+    protected abstract void gatherBuildParameters(final @NotNull ArrayList<String> params);
 
-    protected abstract void copyConfiguration(CMakePluginExtension ext);
+    protected abstract void copyConfiguration(final @NotNull CMakePluginExtension ext);
 
     public void configureFromProject() {
         final CMakePluginExtension ext = (CMakePluginExtension) getProject().getExtensions().getByName("cmake");
@@ -59,27 +62,31 @@ public abstract class AbstractCMakeTask extends DefaultTask {
         executable.set(ext.getExecutable());
         sourceFolder.set(ext.getSourceFolder());
         env.set(ext.getEnv());
+        shellEnv.set(ext.getShellEnv());
         copyConfiguration(ext);
     }
 
-    private ArrayList<String> buildCmdLine() {
+    private @NotNull ArrayList<String> buildCmdLine() {
         final ArrayList<String> params = new ArrayList<>();
         final String executable = this.executable.getOrElse("cmake");
 
         if (env.isPresent()) {
             final Set<Entry<String, String>> envEntries = env.get().entrySet();
-            final StringBuilder builder = new StringBuilder();
 
-            params.add(executable);
-            params.add("-E");
-            params.add("env");
+            if (!envEntries.isEmpty()) {
+                final StringBuilder builder = new StringBuilder();
 
-            for (final Entry<String, String> entry : envEntries) {
-                builder.delete(0, builder.length());
-                builder.append(entry.getKey());
-                builder.append('=');
-                builder.append(entry.getValue());
-                params.add(builder.toString());
+                params.add(executable);
+                params.add("-E");
+                params.add("env");
+
+                for (final Entry<String, String> entry : envEntries) {
+                    builder.delete(0, builder.length());
+                    builder.append(entry.getKey());
+                    builder.append('=');
+                    builder.append(entry.getValue());
+                    params.add(builder.toString());
+                }
             }
         }
 
@@ -99,34 +106,42 @@ public abstract class AbstractCMakeTask extends DefaultTask {
 
     @Input
     @Optional
-    public Property<String> getGenerator() {
+    public @NotNull Property<String> getGenerator() {
         return generator;
     }
 
     @Input
     @Optional
-    public Property<String> getExecutable() {
+    public @NotNull Property<String> getExecutable() {
         return executable;
     }
 
     @InputDirectory
-    public DirectoryProperty getSourceFolder() {
+    public @NotNull DirectoryProperty getSourceFolder() {
         return sourceFolder;
     }
 
     @OutputDirectory
-    public DirectoryProperty getWorkingFolder() {
+    public @NotNull DirectoryProperty getWorkingFolder() {
         return workingFolder;
     }
 
     @Input
     @Optional
-    public MapProperty<String, String> getEnv() {
+    public @NotNull MapProperty<String, String> getEnv() {
         return env;
+    }
+
+    @Input
+    @Optional
+    public @NotNull MapProperty<String, String> getShellEnv() {
+        return shellEnv;
     }
 
     @TaskAction
     public void performAction() {
-        new CMakeExecutor(getLogger(), getName()).exec(buildCmdLine(), workingFolder.getAsFile().get());
+        final CMakeExecutor executor = new CMakeExecutor(getLogger(), getName());
+        executor.setEnv(shellEnv.get());
+        executor.exec(buildCmdLine(), workingFolder.getAsFile().get());
     }
 }

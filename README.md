@@ -16,7 +16,7 @@ buildscript {
         maven { url = 'https://maven.covers1624.net' }
     }
     dependencies {
-        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.0.1.9'
+        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.0.1.11'
     }
 }
 
@@ -69,13 +69,13 @@ cmake {
 
 ## Auto-created tasks
 
-* *cmakeConfigure*: Calls CMake to generate your build scripts in the folder selected by workingFolder.
+* **cmakeClean**: Cleans the workingFolder.
 
-* *cmakeBuild*: Calls CMake --build in the folder selected by workingFolder to actually build.
+* **cmakeConfigure**: Calls CMake to generate your build scripts in the folder selected by workingFolder.
 
-* *cmakeClean*: Cleans the workingFolder.
+* **cmakeBuild**: Calls CMake --build in the folder selected by workingFolder to actually build.
 
-* *cmakeGenerators*: Trys to list the generators available on the current platform by parsing `cmake --help`'s output.
+* **cmakeGenerators**: Trys to list the generators available on the current platform by parsing `cmake --help`'s output.
 
 ## Examples
 
