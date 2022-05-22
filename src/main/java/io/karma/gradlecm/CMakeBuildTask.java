@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Alexander 'KitsuneAlex' Hinze
  * @since 28/05/2019
  */
-public final class CMakeBuildTask extends AbstractCMakeTask {
+public class CMakeBuildTask extends AbstractCMakeTask {
     private static final int numHostThreads = Runtime.getRuntime().availableProcessors();
     /**
      * Find the optimal number of threads to use for the build;

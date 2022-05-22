@@ -27,7 +27,7 @@ import java.io.File;
  * @author Alexander 'KitsuneAlex' Hinze
  * @since 28/05/2019
  */
-public final class CMakePluginExtension {
+public class CMakePluginExtension {
     // parameters used by config and build step
     private final Property<String> executable;
     private final DirectoryProperty workingFolder;

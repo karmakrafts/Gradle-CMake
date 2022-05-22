@@ -12,7 +12,7 @@ import org.gradle.api.tasks.TaskAction;
  * @author Alexander Hinze
  * @since 22/05/2022
  */
-public final class CMakeSetupTask extends DefaultTask {
+public class CMakeSetupTask extends DefaultTask {
     CMakeSetupTask() {}
 
     @TaskAction

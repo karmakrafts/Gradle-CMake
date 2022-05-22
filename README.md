@@ -16,7 +16,7 @@ buildscript {
         maven { url = 'https://maven.covers1624.net' }
     }
     dependencies {
-        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.0.1.11'
+        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.0.1.12'
     }
 }
 
@@ -46,7 +46,7 @@ cmake {
     // Set a platform for generators that support it (usually Visual Studio)
     platform = 'x64'
     // Set a toolset generators that support it (usually only Visual Studio)
-    toolset = 'v141'
+    toolset = 'v143'
     // Optionally set to build static libs
     buildStaticLibs = true
     // Optionally set to build shared libs

@@ -31,7 +31,7 @@ import java.io.InputStreamReader;
  * @author Marco 'freudi74' Freudenberger
  * @since 28/05/2019
  */
-public final class CMakePlugin implements Plugin<Project> {
+public class CMakePlugin implements Plugin<Project> {
     @Override
     public void apply(final @NotNull Project project) {
         final CMakePluginExtension ext = project.getExtensions().create("cmake", CMakePluginExtension.class, project);

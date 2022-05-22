@@ -20,7 +20,7 @@ import java.util.Set;
  * @author Alexander 'KitsuneAlex' Hinze
  * @since 28/05/2019
  */
-public final class CMakeConfigureTask extends AbstractCMakeTask {
+public class CMakeConfigureTask extends AbstractCMakeTask {
     private final Property<String> configurationTypes;
     private final Property<String> installPrefix;
     private final Property<String> platform; // for example "x64" or "Win32" or "ARM" or "ARM64", supported on vs > 8.0
