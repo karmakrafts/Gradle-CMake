@@ -31,7 +31,6 @@ public abstract class AbstractCMakeTask extends DefaultTask {
     public final Property<String> generator; // for example: "Visual Studio 16 2019"
     public final DirectoryProperty workingFolder;
     public final MapProperty<String, String> env;
-    public final MapProperty<String, String> shellEnv;
 
     protected AbstractCMakeTask() {
         final ObjectFactory factory = getProject().getObjects();
@@ -42,7 +41,6 @@ public abstract class AbstractCMakeTask extends DefaultTask {
         executable      = factory.property(String.class);
         sourceFolder    = factory.directoryProperty();
         env             = factory.mapProperty(String.class, String.class);
-        shellEnv        = factory.mapProperty(String.class, String.class);
         // @formatter:on
 
         workingFolder.set(new File(getProject().getBuildDir(), "cmake"));
@@ -62,7 +60,6 @@ public abstract class AbstractCMakeTask extends DefaultTask {
         executable.set(ext.getExecutable());
         sourceFolder.set(ext.getSourceFolder());
         env.set(ext.getEnv());
-        shellEnv.set(ext.getShellEnv());
         copyConfiguration(ext);
     }
 
@@ -126,16 +123,9 @@ public abstract class AbstractCMakeTask extends DefaultTask {
         return env;
     }
 
-    @Input
-    @Optional
-    public @NotNull MapProperty<String, String> getShellEnv() {
-        return shellEnv;
-    }
-
     @TaskAction
     public void performAction() {
         final CMakeExecutor executor = new CMakeExecutor(getLogger(), getName());
-        executor.setEnv(shellEnv.get());
         executor.exec(buildCmdLine(), workingFolder.getAsFile().get());
     }
 }
