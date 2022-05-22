@@ -1,5 +1,6 @@
 package io.karma.gradlecm;
 
+import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
@@ -29,12 +30,19 @@ public class CMakeBuildTask extends AbstractCMakeTask {
     private final Property<Boolean> buildClean;
 
     public CMakeBuildTask() {
+        super(); // Make sure our shared properties are initialized
+
+        final ObjectFactory factory = getProject().getObjects();
+
         setGroup("cmake");
         setDescription("Build a configured Build with CMake");
-        executable = getProject().getObjects().property(String.class);
-        buildConfig = getProject().getObjects().property(String.class);
-        buildTarget = getProject().getObjects().property(String.class);
-        buildClean = getProject().getObjects().property(Boolean.class);
+
+        // @formatter:off
+        executable  = factory.property(String.class);
+        buildConfig = factory.property(String.class);
+        buildTarget = factory.property(String.class);
+        buildClean  = factory.property(Boolean.class);
+        // @formatter:on
     }
 
     @Override

@@ -30,6 +30,7 @@ public class CMakePluginExtension {
     private final Property<String> executable;
     private final DirectoryProperty workingFolder;
     private final Property<String> generator; // for example: "Visual Studio 16 2019"
+    private final MapProperty<String, String> env;
 
     // parameters used by config step
     private final DirectoryProperty sourceFolder;
@@ -39,7 +40,7 @@ public class CMakePluginExtension {
     private final Property<String> toolset; // for example "v142", supported on vs > 10.0
     private final Property<Boolean> buildSharedLibs;
     private final Property<Boolean> buildStaticLibs;
-    private final MapProperty<String, String> def;
+    private final MapProperty<String, String> defs;
 
     // parameters used on build step
     private final Property<String> buildConfig;
@@ -50,15 +51,18 @@ public class CMakePluginExtension {
     public CMakePluginExtension(Project project) {
         executable = project.getObjects().property(String.class);
         workingFolder = project.getObjects().directoryProperty();
+        generator = project.getObjects().property(String.class);
+        env = project.getObjects().mapProperty(String.class, String.class);
+
         sourceFolder = project.getObjects().directoryProperty();
         configurationTypes = project.getObjects().property(String.class);
         installPrefix = project.getObjects().property(String.class);
-        generator = project.getObjects().property(String.class);
         platform = project.getObjects().property(String.class);
         toolset = project.getObjects().property(String.class);
         buildSharedLibs = project.getObjects().property(Boolean.class);
         buildStaticLibs = project.getObjects().property(Boolean.class);
-        def = project.getObjects().mapProperty(String.class, String.class);
+        defs = project.getObjects().mapProperty(String.class, String.class);
+
         buildConfig = project.getObjects().property(String.class);
         buildTarget = project.getObjects().property(String.class);
         buildClean = project.getObjects().property(Boolean.class);
@@ -68,7 +72,6 @@ public class CMakePluginExtension {
         sourceFolder.set(new File(project.getBuildDir(), "src" + File.separator + "main" + File.separator + "cpp"));
     }
 
-    /// region getters
     public Property<String> getExecutable() {
         return executable;
     }
@@ -109,8 +112,8 @@ public class CMakePluginExtension {
         return buildStaticLibs;
     }
 
-    public MapProperty<String, String> getDef() {
-        return def;
+    public MapProperty<String, String> getDefs() {
+        return defs;
     }
 
     public Property<String> getBuildConfig() {
@@ -124,7 +127,8 @@ public class CMakePluginExtension {
     public Property<Boolean> getBuildClean() {
         return buildClean;
     }
-    /// endregion getters
 
-
+    public MapProperty<String, String> getEnv() {
+        return env;
+    }
 }

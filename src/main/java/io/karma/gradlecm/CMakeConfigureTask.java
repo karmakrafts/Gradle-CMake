@@ -1,12 +1,14 @@
 package io.karma.gradlecm;
 
+import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * @author Marco 'freudi74' Freudenberger
@@ -20,19 +22,25 @@ public class CMakeConfigureTask extends AbstractCMakeTask {
     private final Property<String> toolset; // for example "v142", supported on vs > 10.0
     private final Property<Boolean> buildSharedLibs;
     private final Property<Boolean> buildStaticLibs;
-    private final MapProperty<String, String> def;
+    private final MapProperty<String, String> defs;
 
     public CMakeConfigureTask() {
+        super(); // Make sure our shared properties are initialized
+
+        final ObjectFactory factory = getProject().getObjects();
+
         setGroup("cmake");
         setDescription("Configure a Build with CMake");
-        configurationTypes = getProject().getObjects().property(String.class);
-        installPrefix = getProject().getObjects().property(String.class);
 
-        platform = getProject().getObjects().property(String.class);
-        toolset = getProject().getObjects().property(String.class);
-        buildSharedLibs = getProject().getObjects().property(Boolean.class);
-        buildStaticLibs = getProject().getObjects().property(Boolean.class);
-        def = getProject().getObjects().mapProperty(String.class, String.class);
+        // @formatter:off
+        configurationTypes  = factory.property(String.class);
+        installPrefix       = factory.property(String.class);
+        platform            = factory.property(String.class);
+        toolset             = factory.property(String.class);
+        buildSharedLibs     = factory.property(Boolean.class);
+        buildStaticLibs     = factory.property(Boolean.class);
+        defs                = factory.mapProperty(String.class, String.class);
+        // @formatter:on
     }
 
     @Override
@@ -69,9 +77,10 @@ public class CMakeConfigureTask extends AbstractCMakeTask {
             params.add("-DBUILD_STATIC_LIBS=" + (buildStaticLibs.get() ? "ON" : "OFF"));
         }
 
+        if (defs.isPresent()) {
+            final Set<Entry<String, String>> defEntries = defs.get().entrySet();
 
-        if (def.isPresent()) {
-            for (final Map.Entry<String, String> entry : def.get().entrySet()) {
+            for (final Entry<String, String> entry : defEntries) {
                 params.add("-D" + entry.getKey() + "=" + entry.getValue());
             }
         }
@@ -92,7 +101,7 @@ public class CMakeConfigureTask extends AbstractCMakeTask {
         toolset.set(ext.getToolset());
         buildSharedLibs.set(ext.getBuildSharedLibs());
         buildStaticLibs.set(ext.getBuildStaticLibs());
-        def.set(ext.getDef());
+        defs.set(ext.getDefs());
     }
 
     @Input
@@ -133,7 +142,7 @@ public class CMakeConfigureTask extends AbstractCMakeTask {
 
     @Input
     @Optional
-    public MapProperty<String, String> getDef() {
-        return def;
+    public MapProperty<String, String> getDefs() {
+        return defs;
     }
 }
