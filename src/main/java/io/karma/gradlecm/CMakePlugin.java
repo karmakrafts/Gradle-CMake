@@ -32,16 +32,15 @@ import java.io.InputStreamReader;
  * @since 28/05/2019
  */
 public class CMakePlugin implements Plugin<Project> {
+    private static final String TASK_GROUP = "cmake";
+
     @Override
     public void apply(final @NotNull Project project) {
         final CMakePluginExtension ext = project.getExtensions().create("cmake", CMakePluginExtension.class, project);
         final TaskContainer tasks = project.getTasks();
 
-        //tasks.register("cmakeSetup", CMakeSetupTask.class, task -> {
-        //    /* .. */
-        //});
-
         tasks.register("cmakeConfigure", CMakeConfigureTask.class, task -> {
+            task.setGroup(TASK_GROUP);
             task.getExecutable().set(ext.getExecutable());
             task.getWorkingFolder().set(ext.getWorkingFolder());
             task.getSourceFolder().set(ext.getSourceFolder());
@@ -56,6 +55,7 @@ public class CMakePlugin implements Plugin<Project> {
         });
 
         tasks.register("cmakeBuild", CMakeBuildTask.class, task -> {
+            task.setGroup(TASK_GROUP);
             task.getExecutable().set(ext.getExecutable());
             task.getWorkingFolder().set(ext.getWorkingFolder());
             task.getBuildConfig().set(ext.getBuildConfig());
@@ -64,7 +64,7 @@ public class CMakePlugin implements Plugin<Project> {
         });
 
         tasks.register("cmakeClean", DefaultTask.class, task -> {
-            task.setGroup("cmake");
+            task.setGroup(TASK_GROUP);
             task.setDescription("Clean CMake configuration");
 
             task.doFirst(t -> {
@@ -79,7 +79,7 @@ public class CMakePlugin implements Plugin<Project> {
         });
 
         tasks.register("cmakeGenerators", DefaultTask.class, task -> {
-            task.setGroup("cmake");
+            task.setGroup(TASK_GROUP);
             task.setDescription("List available CMake generators");
 
             task.doFirst(t -> {
@@ -104,7 +104,8 @@ public class CMakePlugin implements Plugin<Project> {
                     }
                     process.waitFor();
                 }
-                catch (IOException | InterruptedException e) {
+                catch (IOException |
+                       InterruptedException e) {
                     throw new GradleScriptException("cmake --help failed.", e);
                 }
             });
