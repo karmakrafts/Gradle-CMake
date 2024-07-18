@@ -1,4 +1,4 @@
-image: java:8-jdk
+image: java:11-jdk
 stages:
   - build
 cache:
@@ -9,7 +9,7 @@ build:
   stage: build
   script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
-    - ./gradlew build publish --info --no-daemon
+    - ./gradlew build publish --stacktrace --no-daemon
   artifacts:
     paths:
       - build/libs/*.jar

@@ -1,7 +1,5 @@
 package io.karma.gradlecm;
 
-import io.karma.kommons.function.Functions;
-import io.karma.kommons.util.ExceptionUtils;
 import org.gradle.api.GradleException;
 import org.gradle.api.logging.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +24,7 @@ public final class CMakeExecutor {
     }
 
     void exec(final @NotNull List<String> cmdLine, final @NotNull File workingFolder) {
-        Functions.tryDo(() -> {
+        try {
             final StringBuilder sb = new StringBuilder("  CMakePlugin.task " + taskName + " - exec: ");
 
             for (final String s : cmdLine) {
@@ -68,7 +66,10 @@ public final class CMakeExecutor {
             if (exitCode != 0) {
                 throw new GradleException(String.format("CMake returned with abnormal exit code: %d", exitCode));
             }
-        }, e -> ExceptionUtils.handleError(e, logger::error));
+        }
+        catch(Throwable error) {
+            logger.error("Could not execute command: {}", error.toString());
+        }
     }
 }
 
