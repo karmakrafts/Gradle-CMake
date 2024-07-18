@@ -100,8 +100,7 @@ tasks {
                     groupId = project.group as String
                     artifactId = project.base.archivesName.get()
                     version = project.version as String
-
-                    artifact(jar)
+                    
                     artifact(sourcesJar)
 
                     pom {
