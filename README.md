@@ -13,10 +13,10 @@ If you have requests or find bugs, please create an issue.
 ```groovy
 buildscript {
     repositories {
-        maven { url = 'https://maven.covers1624.net' }
+        maven { url = 'https://git.karmakrafts.dev/api/v4/projects/177/packages/maven' }
     }
     dependencies {
-        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.0.2.18'
+        classpath group: 'io.karma.gradlecm', name: 'gradle-cmake', version: '1.1.0.22'
     }
 }
 
