@@ -59,18 +59,6 @@ dependencies {
 }
 
 tasks {
-    jar {
-        manifest.attributes.apply {
-            this["Specification-Title"] = "Gradle CMake"
-            this["Specification-Vendor"] = "freudi74"
-            this["Specification-Version"] = "1"
-            this["Implementation-Title"] = "Gradle CMake"
-            this["Implementation-Vendor"] = "Karma Krafts"
-            this["Implementation-Version"] = project.version
-            this["Implementation-Timestamp"] = SimpleDateFormat.getDateTimeInstance().format(Date.from(buildTime))
-        }
-    }
-
     val classes by getting
 
     val sourcesJar = create<Jar>("sourcesJar") {
