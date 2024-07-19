@@ -61,7 +61,7 @@ dependencies {
 gradlePlugin {
     plugins {
         val cmakePlugin by creating {
-            id = "${base.archivesName}.${project.group}"
+            id = "${base.archivesName.get()}.${project.group}"
             implementationClass = "${project.group}.CMakePlugin"
         }
     }
