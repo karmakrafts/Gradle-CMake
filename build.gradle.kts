@@ -58,6 +58,15 @@ dependencies {
     implementation(libs.annotations)
 }
 
+gradlePlugin {
+    plugins {
+        val cmakePlugin by creating {
+            id = "${base.archivesName}.${project.group}"
+            implementationClass = "${project.group}.CMakePlugin"
+        }
+    }
+}
+
 tasks {
     val classes by getting
 
